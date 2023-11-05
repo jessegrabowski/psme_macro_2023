@@ -1,0 +1,62 @@
+block STEADY_STATE
+{
+	identities
+	{
+		Y[ss] = Y_bar;
+		C[ss] = Y[ss];
+		r[ss] = r_bar;
+		lambda[ss] = 1 / C[ss];
+		S[ss] = 0;
+	};
+};
+
+
+block HOUSEHOLD
+{
+	definitions
+	{
+		u[] = log(C[]);
+	};
+	
+	objective
+	{
+		U[] = u[] + beta * E[][U[1]];
+	};
+	
+	controls
+	{
+		C[], S[];
+	};
+	
+	constraints
+	{
+		C[] + S[] = Y[] + (1 + r[]) * S[-1] : lambda[];
+	};
+	
+	calibration
+	{
+		beta = 0.98;
+	};
+};
+
+block EXOGENOUS
+{
+	identities
+	{
+		log(Y[]) = (1 - rho_Y) * log(Y_bar) + rho_Y * log(Y[-1]) + income_shock[];
+		r[] = r_bar;
+	};
+	
+	shocks
+	{
+		income_shock[];
+	};
+	
+	calibration
+	{
+		rho_Y = 0.999999999999;
+		Y_bar = 10;
+		
+		r_bar = 0.02040816; # 1/beta - 1
+	};
+};
