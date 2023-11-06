@@ -3,10 +3,10 @@ block STEADY_STATE
 	identities
 	{
 		Y[ss] = Y_bar;
-		C[ss] = Y[ss];
 		r[ss] = r_bar;
+		S[ss] = 2;
+		C[ss] = Y[ss] + r[ss] * S[ss];
 		lambda[ss] = 1 / C[ss];
-		S[ss] = 0;
 	};
 };
 
